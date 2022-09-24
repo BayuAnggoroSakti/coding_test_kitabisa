@@ -1,0 +1,478 @@
+{
+	"info": {
+		"_postman_id": "323bff97-05e9-4336-9602-685f8030ad44",
+		"name": "Soccer API Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Adding Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"   pm.response.to.have.status(201);\r",
+							"}); \r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body should an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.ownProperty('status');\r",
+							"    pm.expect(responseJson.status).to.equals('success');\r",
+							"    pm.expect(responseJson).to.ownProperty('message');\r",
+							"    pm.expect(responseJson.message).to.equals('Player berhasil ditambahkan');\r",
+							"    pm.expect(responseJson).to.ownProperty('data');\r",
+							"    pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should have playerId property and not equal to empty', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const { data } = responseJson;\r",
+							" \r",
+							"    pm.expect(data).to.ownProperty('playerId');\r",
+							"    pm.expect(data.playerId).to.not.equals('');\r",
+							" \r",
+							"    pm.environment.set('playerId', data.playerId);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Player A\",\r\n   \"position\": \"keeper\",\r\n   \"age\": \"10\"\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/players",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting All Players",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"   pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should an object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body should have the correct property and value', () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.have.ownProperty('status');\r",
+							"   pm.expect(responseJson.status).to.equals('success');\r",
+							"   pm.expect(responseJson).to.have.ownProperty('data');\r",
+							"   pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should have a players array and contain at least 1 item', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   const { data } = responseJson;\r",
+							" \r",
+							"   pm.expect(data).to.have.ownProperty('players');\r",
+							"   pm.expect(data.players).to.be.an('array');\r",
+							"   pm.expect(data.players).lengthOf.at.least(1);\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/players",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting Specified Player",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"}); \r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"   pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have the correct property and value', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							" \r",
+							"   pm.expect(responseJson).to.have.ownProperty('status');\r",
+							"   pm.expect(responseJson.status).to.equals('success');\r",
+							"   pm.expect(responseJson).to.have.ownProperty('data');\r",
+							"   pm.expect(responseJson.data).to.be.an('object');\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body data should contain note object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   const { data } = responseJson;\r",
+							" \r",
+							"   pm.expect(data).to.have.ownProperty('player');\r",
+							"   pm.expect(data.player).to.be.an('object');\r",
+							"}); \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/players/{{playerId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"players",
+						"{{playerId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"   pm.expect(pm.response.headers.get('Content-Type')).to.equals(\"application/json; charset=utf-8\");\r",
+							"})\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Player A Revised\",\r\n    \"age\": \"10\",\r\n    \"position\": \"keeper\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/players/{{playerId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"players",
+						"{{playerId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adding Teams with or Without Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"   pm.response.to.have.status(201);\r",
+							"}); \r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body should an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.ownProperty('status');\r",
+							"    pm.expect(responseJson.status).to.equals('success');\r",
+							"    pm.expect(responseJson).to.ownProperty('message');\r",
+							"    pm.expect(responseJson.message).to.equals('Team berhasil ditambahkan');\r",
+							"    pm.expect(responseJson).to.ownProperty('data');\r",
+							"    pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should have teamId property and not equal to empty', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const { data } = responseJson;\r",
+							" \r",
+							"    pm.expect(data).to.ownProperty('teamId');\r",
+							"    pm.expect(data.teamId).to.not.equals('');\r",
+							" \r",
+							"    pm.environment.set('teamId', data.teamId);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Team A\",\r\n    \"teams\":[\"{{playerId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/teams",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting All Teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"   pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should an object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body should have the correct property and value', () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.have.ownProperty('status');\r",
+							"   pm.expect(responseJson.status).to.equals('success');\r",
+							"   pm.expect(responseJson).to.have.ownProperty('data');\r",
+							"   pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should have a teams array and contain at least 1 item', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   const { data } = responseJson;\r",
+							" \r",
+							"   pm.expect(data).to.have.ownProperty('teams');\r",
+							"   pm.expect(data.teams).to.be.an('array');\r",
+							"   pm.expect(data.teams).lengthOf.at.least(1);\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/teams",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting Specified Teams",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/teams/{{teamId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"teams",
+						"{{teamId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adding Players To Teams",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"team\":\"{{teamId}}\",\r\n    \"players\":[\"{{playerId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/teams/addPlayers",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"teams",
+						"addPlayers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Players",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response status code should have 200 value', () => {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response Content-Type header should have application/json value', () => {\r",
+							"   pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+							"}); \r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"   const responseJson = pm.response.json();\r",
+							" \r",
+							"   pm.expect(responseJson).to.have.ownProperty('status');\r",
+							"   pm.expect(responseJson.status).to.equals('success');\r",
+							"   pm.expect(responseJson).to.have.ownProperty('message');\r",
+							"   pm.expect(responseJson.message).to.equals('Player berhasil dihapus');\r",
+							"}); \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/players/{{playerId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"players",
+						"{{playerId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

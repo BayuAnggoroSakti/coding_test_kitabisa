@@ -1,0 +1,18 @@
+{
+  "name": "problem_3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "problem_3.js",
+  "scripts": {
+    "start-test": "jest"
+  },
+  "author": "Bayu Anggoro Sakti",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.7",
+    "jest": "^28.1.1"
+  }
+}
